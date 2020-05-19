@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>Easy_Licensing</RootNamespace>
+    <PackageId>Easy.Licensing</PackageId>
+    <Authors>Nathanael Frey</Authors>
+    <Company>The Thirsty Ape</Company>
+    <Copyright>Copyright 2020 The Thirsty Ape</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/thirstyape/Easy-Licensing</RepositoryUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <Description>This project was created to provide an easy to use and configurable license generation and validation library. If the default configuration is sufficient for your needs the library can be used out of the box without further setup. However, if you have specific licensing needs you can alter the library configuration settings and also provide custom license requirements.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
