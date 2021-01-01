@@ -6,7 +6,7 @@
     <PackageId>Easy.Licensing</PackageId>
     <Authors>Nathanael Frey</Authors>
     <Company>The Thirsty Ape</Company>
-    <Copyright>Copyright 2020 The Thirsty Ape</Copyright>
+    <Copyright>Copyright 2021 The Thirsty Ape</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryUrl>https://github.com/thirstyape/Easy-Licensing</RepositoryUrl>
     <PackageIcon>icon.png</PackageIcon>
@@ -22,6 +22,11 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
+    <PackageReference Include="System.Security.Cryptography.Cng" Version="4.7.0" />
   </ItemGroup>
 
 </Project>
