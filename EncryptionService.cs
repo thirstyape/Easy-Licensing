@@ -1,4 +1,5 @@
 ﻿using Easy_Licensing.Enums;
+using Easy_Licensing.Models;
 using Easy_Licensing.Tools;
 
 using System;
@@ -13,15 +14,10 @@ namespace Easy_Licensing
     /// </summary>
     public static class EncryptionService
     {
-        // Encrpytion and Key Derivation settings
-        private const int AesBlockSize = 128;
-        private const int AesKeySize = 256;
-        private const int SaltSize = 64;
-        private const int KeyGenerationIterations = 10_000;
-        private const int MinPasswordLength = 12;
-
-        private static int AesKeyByteSize => AesKeySize / 8;
-        private static int SaltByteSize => SaltSize / 8;
+        /// <summary>
+        /// Contains the settings to use during encryption and decryption operations
+        /// </summary>
+        public static EncryptionSettings Settings { get; set; } = new EncryptionSettings();
 
         /// <summary>
         /// Generates a cryptographically secure random byte key for use with encryption methods
@@ -29,7 +25,7 @@ namespace Easy_Licensing
         public static byte[] NewKey()
         {
             var random = RandomNumberGenerator.Create();
-            var key = new byte[AesKeyByteSize];
+            var key = new byte[Settings.AesKeyByteSize];
 
             random.GetBytes(key);
 
@@ -113,25 +109,25 @@ namespace Easy_Licensing
         public static byte[] EncryptSymmetric(byte[] message, string password)
         {
             // Validate inputs
-            if (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength)
-                throw new ArgumentNullException(nameof(password), $"Password must be at least {MinPasswordLength} characters long.");
+            if (string.IsNullOrWhiteSpace(password) || password.Length < Settings.MinPasswordLength)
+                throw new ArgumentNullException(nameof(password), $"Password must be at least {Settings.MinPasswordLength} characters long.");
 
             if (message.IsNullOrEmpty())
                 throw new ArgumentNullException(nameof(message), "Must provide text to encrypt.");
 
             // Prepare method variables
-            var payload = new byte[SaltByteSize * 2];
+            var payload = new byte[Settings.SaltByteSize * 2];
             var payloadIndex = 0;
 
             byte[] cryptKey;
             byte[] authKey;
 
             // Use a random salt to generate the crypt key
-            using (var generator = new Rfc2898DeriveBytes(password, SaltByteSize, KeyGenerationIterations))
+            using (var generator = new Rfc2898DeriveBytes(password, Settings.SaltByteSize, Settings.KeyGenerationIterations))
             {
                 var salt = generator.Salt;
 
-                cryptKey = generator.GetBytes(AesKeyByteSize);
+                cryptKey = generator.GetBytes(Settings.AesKeyByteSize);
 
                 Array.Copy(salt, 0, payload, 0, salt.Length);
 
@@ -139,11 +135,11 @@ namespace Easy_Licensing
             }
 
             // Use a random salt to generate the auth key
-            using (var generator = new Rfc2898DeriveBytes(password, SaltByteSize, KeyGenerationIterations))
+            using (var generator = new Rfc2898DeriveBytes(password, Settings.SaltByteSize, Settings.KeyGenerationIterations))
             {
                 var salt = generator.Salt;
 
-                authKey = generator.GetBytes(AesKeyByteSize);
+                authKey = generator.GetBytes(Settings.AesKeyByteSize);
 
                 Array.Copy(salt, 0, payload, payloadIndex, salt.Length);
             }
@@ -183,11 +179,11 @@ namespace Easy_Licensing
         public static byte[] EncryptSymmetric(byte[] message, byte[] rgbKey, byte[] authKey, byte[] unencryptedData = null)
         {
             // Validate inputs
-            if (rgbKey.IsNullOrEmpty() || rgbKey.Length != AesKeyByteSize)
-                throw new ArgumentException($"Key needs to be {AesKeySize} bits in size.", nameof(rgbKey));
+            if (rgbKey.IsNullOrEmpty() || rgbKey.Length != Settings.AesKeyByteSize)
+                throw new ArgumentException($"Key needs to be {Settings.AesKeySize} bits in size.", nameof(rgbKey));
 
-            if (authKey.IsNullOrEmpty() || authKey.Length != AesKeyByteSize)
-                throw new ArgumentException($"Key needs to be {AesKeySize} bits in size.", nameof(authKey));
+            if (authKey.IsNullOrEmpty() || authKey.Length != Settings.AesKeyByteSize)
+                throw new ArgumentException($"Key needs to be {Settings.AesKeySize} bits in size.", nameof(authKey));
 
             if (message.IsNullOrEmpty())
                 throw new ArgumentNullException(nameof(message), "Must provide text to encrypt.");
@@ -201,8 +197,8 @@ namespace Easy_Licensing
             // Encrypt the message
             using (var aes = new AesManaged
             {
-                KeySize = AesKeySize,
-                BlockSize = AesBlockSize,
+                KeySize = Settings.AesKeySize,
+                BlockSize = Settings.AesBlockSize,
                 Mode = CipherMode.CBC,
                 Padding = PaddingMode.PKCS7
             })
@@ -273,15 +269,15 @@ namespace Easy_Licensing
         public static byte[] DecryptSymmetric(byte[] message, string password)
         {
             // Validate inputs
-            if (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength)
-                throw new ArgumentNullException(nameof(password), $"Password must be at least {MinPasswordLength} characters long.");
+            if (string.IsNullOrWhiteSpace(password) || password.Length < Settings.MinPasswordLength)
+                throw new ArgumentNullException(nameof(password), $"Password must be at least {Settings.MinPasswordLength} characters long.");
 
             if (message.IsNullOrEmpty())
                 throw new ArgumentNullException(nameof(message), "Must provide text to decrypt.");
 
             // Prepare method variables
-            var cryptSalt = new byte[SaltByteSize];
-            var authSalt = new byte[SaltByteSize];
+            var cryptSalt = new byte[Settings.SaltByteSize];
+            var authSalt = new byte[Settings.SaltByteSize];
 
             byte[] cryptKey;
             byte[] authKey;
@@ -291,18 +287,18 @@ namespace Easy_Licensing
             Array.Copy(message, cryptSalt.Length, authSalt, 0, authSalt.Length);
 
             // Generate the crypt key
-            using (var generator = new Rfc2898DeriveBytes(password, cryptSalt, KeyGenerationIterations))
+            using (var generator = new Rfc2898DeriveBytes(password, cryptSalt, Settings.KeyGenerationIterations))
             {
-                cryptKey = generator.GetBytes(AesKeyByteSize);
+                cryptKey = generator.GetBytes(Settings.AesKeyByteSize);
             }
 
             // Generate the auth key
-            using (var generator = new Rfc2898DeriveBytes(password, authSalt, KeyGenerationIterations))
+            using (var generator = new Rfc2898DeriveBytes(password, authSalt, Settings.KeyGenerationIterations))
             {
-                authKey = generator.GetBytes(AesKeyByteSize);
+                authKey = generator.GetBytes(Settings.AesKeyByteSize);
             }
 
-            return DecryptSymmetric(message, cryptKey, authKey, SaltByteSize * 2);
+            return DecryptSymmetric(message, cryptKey, authKey, Settings.SaltByteSize * 2);
         }
 
         /// <summary>
@@ -337,11 +333,11 @@ namespace Easy_Licensing
         public static byte[] DecryptSymmetric(byte[] message, byte[] rgbKey, byte[] authKey, int unencryptedDataLength = 0)
         {
             //Basic Usage Error Checks
-            if (rgbKey.IsNullOrEmpty() || rgbKey.Length != AesKeyByteSize)
-                throw new ArgumentException($"Key needs to be {AesKeySize} bits in size.", nameof(rgbKey));
+            if (rgbKey.IsNullOrEmpty() || rgbKey.Length != Settings.AesKeyByteSize)
+                throw new ArgumentException($"Key needs to be {Settings.AesKeySize} bits in size.", nameof(rgbKey));
 
-            if (authKey.IsNullOrEmpty() || authKey.Length != AesKeyByteSize)
-                throw new ArgumentException($"Key needs to be {AesKeySize} bits in size.", nameof(authKey));
+            if (authKey.IsNullOrEmpty() || authKey.Length != Settings.AesKeyByteSize)
+                throw new ArgumentException($"Key needs to be {Settings.AesKeySize} bits in size.", nameof(authKey));
 
             if (message.IsNullOrEmpty())
                 throw new ArgumentNullException(nameof(message), "Must provide text to decrypt.");
@@ -350,7 +346,7 @@ namespace Easy_Licensing
             using var hmac = new HMACSHA256(authKey);
 
             var sentTag = new byte[hmac.HashSize / 8];
-            var ivLength = AesBlockSize / 8;
+            var ivLength = Settings.AesBlockSize / 8;
 
             var calcTag = hmac.ComputeHash(message, 0, message.Length - sentTag.Length);
 
@@ -376,8 +372,8 @@ namespace Easy_Licensing
             // Decrypt the message
             using var aes = new AesManaged
             {
-                KeySize = AesKeySize,
-                BlockSize = AesBlockSize,
+                KeySize = Settings.AesKeySize,
+                BlockSize = Settings.AesBlockSize,
                 Mode = CipherMode.CBC,
                 Padding = PaddingMode.PKCS7
             };

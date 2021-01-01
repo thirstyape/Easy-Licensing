@@ -11,6 +11,16 @@
     <RepositoryUrl>https://github.com/thirstyape/Easy-Licensing</RepositoryUrl>
     <PackageIcon>icon.png</PackageIcon>
     <Description>This project was created to provide an easy to use and configurable license generation and validation library. If the default configuration is sufficient for your needs the library can be used out of the box without further setup. However, if you have specific licensing needs you can alter the library configuration settings and also provide custom license requirements.</Description>
+    <PackageTags>license licensing generator utility</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>C:\Users\Nathanael\source\repos\tools\easy-licensing\Easy Licensing.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +37,21 @@
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
     <PackageReference Include="System.Security.Cryptography.Cng" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
