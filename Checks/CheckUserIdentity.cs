@@ -25,13 +25,13 @@ namespace Easy_Licensing.Checks
         public ILicenseRequirements Settings { get; set; }
 
         /// <inheritdoc/>
-        public bool CheckLicense(string licenseText)
+        public bool CheckLicense(ILicense license)
         {
             // Reset
             FailureMessage = null;
 
             // Check for inactive
-            if ((Settings.LicenseType & LicenseTypes.UserIdentity) != 0)
+            if ((Settings.LicenseType & LicenseTypes.UserIdentity) == 0)
                 return true;
 
             // Run check

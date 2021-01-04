@@ -1,11 +1,25 @@
-﻿using System;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 
 namespace Easy_Licensing
 {
     public class LicenseGeneratorService
     {
-        void Shutup()
+        public void GenerateLicense()
+        {
+
+        }
+
+        public void GenerateLicenseRequest()
+        {
+
+        }
+
+        public void GenerateEncryptionKeys()
+        {
+
+        }
+
+        void Temp()
         {
             using var dh = new ECDiffieHellmanCng
             {

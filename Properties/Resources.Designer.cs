@@ -61,11 +61,29 @@ namespace Easy_Licensing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The provided hardware details did not match the license details..
+        ///   Looks up a localized string similar to One or more provided hardware details did not match the license details: {0}..
         /// </summary>
         internal static string FailedHardwareIdentity {
             get {
                 return ResourceManager.GetString("FailedHardwareIdentity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License does not allow running within a virtual machine.
+        /// </summary>
+        internal static string FailedHardwareVirtualBlocked {
+            get {
+                return ResourceManager.GetString("FailedHardwareVirtualBlocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License requires running within a virtual machine.
+        /// </summary>
+        internal static string FailedHardwareVirtualRequired {
+            get {
+                return ResourceManager.GetString("FailedHardwareVirtualRequired", resourceCulture);
             }
         }
         
@@ -79,7 +97,7 @@ namespace Easy_Licensing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The provided license has expired..
+        ///   Looks up a localized string similar to The provided license expired at {0}..
         /// </summary>
         internal static string FailedTimeLock {
             get {
@@ -88,7 +106,7 @@ namespace Easy_Licensing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The provided user details did not match the license details..
+        ///   Looks up a localized string similar to One or more provided user details did not match the license details: {0}..
         /// </summary>
         internal static string FailedUserIdentity {
             get {

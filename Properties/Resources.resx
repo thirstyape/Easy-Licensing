@@ -118,15 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FailedHardwareIdentity" xml:space="preserve">
-    <value>The provided hardware details did not match the license details.</value>
+    <value>One or more provided hardware details did not match the license details: {0}.</value>
+  </data>
+  <data name="FailedHardwareVirtualBlocked" xml:space="preserve">
+    <value>License does not allow running within a virtual machine</value>
+  </data>
+  <data name="FailedHardwareVirtualRequired" xml:space="preserve">
+    <value>License requires running within a virtual machine</value>
   </data>
   <data name="FailedProductKey" xml:space="preserve">
     <value>The provided product key was invalid.</value>
   </data>
   <data name="FailedTimeLock" xml:space="preserve">
-    <value>The provided license has expired.</value>
+    <value>The provided license expired at {0}.</value>
   </data>
   <data name="FailedUserIdentity" xml:space="preserve">
-    <value>The provided user details did not match the license details.</value>
+    <value>One or more provided user details did not match the license details: {0}.</value>
   </data>
 </root>

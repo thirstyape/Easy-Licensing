@@ -1,10 +1,12 @@
 ﻿using Easy_Licensing.Checks;
 using Easy_Licensing.Interfaces;
+using Easy_Licensing.Models;
 
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text.Json;
 using System.Threading;
 
 namespace Easy_Licensing
@@ -60,7 +62,8 @@ namespace Easy_Licensing
                 throw new ArgumentException("The specified license file does not exist", nameof(licenseFile));
 
             // Read license file and check
-            var license = File.ReadAllText(licenseFile.FullName);
+            var licenseText = File.ReadAllText(licenseFile.FullName);
+            var license = JsonSerializer.Deserialize<License>(licenseText);
 
             return CheckAndValidate(license, userInformation, languageCode);
         }
@@ -79,6 +82,26 @@ namespace Easy_Licensing
             if (string.IsNullOrEmpty(licenseText))
                 throw new ArgumentNullException(nameof(licenseText), "Must provide license to check");
 
+            // Deserialize license and check
+            var license = JsonSerializer.Deserialize<License>(licenseText);
+
+            return CheckAndValidate(license, userInformation, languageCode);
+        }
+
+        /// <summary>
+        /// Runs specified checks on the provided license
+        /// </summary>
+        /// <param name="license">The deserialized license to check</param>
+        /// <param name="userInformation">An optional dictionary containing user information to compare against the license</param>
+        /// <param name="languageCode">An optional language code used for error text</param>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        public bool CheckAndValidate(ILicense license, Dictionary<string, string> userInformation = null, string languageCode = null)
+        {
+            // Input validation
+            if (license == null)
+                throw new ArgumentNullException(nameof(license), "Provided license was null");
+
             // Reset
             FailureMessages.Clear();
 
@@ -94,7 +117,7 @@ namespace Easy_Licensing
             // Run checks
             foreach (var check in LicenseChecks)
             {
-                var pass = check.CheckLicense(licenseText);
+                var pass = check.CheckLicense(license);
 
                 if (pass == false)
                     FailureMessages.Add(check.FailureMessage);
