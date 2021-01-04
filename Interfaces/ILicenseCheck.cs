@@ -18,6 +18,7 @@
         /// <summary>
         /// Executes the check on the provided license
         /// </summary>
-        public bool CheckLicense();
+        /// <param name="licenseText">The text of the license to check</param>
+        public bool CheckLicense(string licenseText);
     }
 }

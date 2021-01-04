@@ -1,4 +1,5 @@
-﻿using Easy_Licensing.Interfaces;
+﻿using Easy_Licensing.Enums;
+using Easy_Licensing.Interfaces;
 using Easy_Licensing.Properties;
 
 namespace Easy_Licensing.Checks
@@ -24,10 +25,19 @@ namespace Easy_Licensing.Checks
         public ILicenseRequirements Settings { get; set; }
 
         /// <inheritdoc/>
-        public bool CheckLicense()
+        public bool CheckLicense(string licenseText)
         {
+            // Reset
+            FailureMessage = null;
+
+            // Check for inactive
+            if ((Settings.LicenseType & LicenseTypes.UserIdentity) != 0)
+                return true;
+
+            // Run check
             FailureMessage = Resources.FailedUserIdentity;
 
+            // Return result
             return false;
         }
     }
