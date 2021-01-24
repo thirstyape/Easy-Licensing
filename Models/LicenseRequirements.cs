@@ -23,6 +23,22 @@ namespace Easy_Licensing.Models
         public bool IsEncrypted { get; set; }
 
         /// <inheritdoc/>
+        [JsonPropertyName("Check CPU Serial")]
+        public bool CheckCpuSerial { get; set; }
+
+        /// <inheritdoc/>
+        [JsonPropertyName("Check Disk Serial")]
+        public bool CheckDiskSerial { get; set; }
+
+        /// <inheritdoc/>
+        [JsonPropertyName("Check Ethernet MAC")]
+        public bool CheckEthernetMac { get; set; }
+
+        /// <inheritdoc/>
+        [JsonPropertyName("Check Wireless MAC")]
+        public bool CheckWirelessMac { get; set; }
+
+        /// <inheritdoc/>
         [JsonPropertyName("Check Virtual Machine")]
         public bool CheckVirtualMachine { get; set; }
     }

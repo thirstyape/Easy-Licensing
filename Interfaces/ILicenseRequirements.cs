@@ -26,6 +26,26 @@ namespace Easy_Licensing.Interfaces
         public bool IsEncrypted { get; set; }
 
         /// <summary>
+        /// Specifies whether to check the licensed machine's CPU serial number
+        /// </summary>
+        public bool CheckCpuSerial { get; set; }
+
+        /// <summary>
+        /// Specifies whether to check the licensed machine's primary disk serial number
+        /// </summary>
+        public bool CheckDiskSerial { get; set; }
+
+        /// <summary>
+        /// Specifies whether to check the licensed machine's primary Ethernet card MAC address
+        /// </summary>
+        public bool CheckEthernetMac { get; set; }
+
+        /// <summary>
+        /// Specifies whether to check the licensed machine's primary wireless adapter MAC address
+        /// </summary>
+        public bool CheckWirelessMac { get; set; }
+
+        /// <summary>
         /// Specifies whether to check the licensed machine's virtualization status
         /// </summary>
         public bool CheckVirtualMachine { get; set; }

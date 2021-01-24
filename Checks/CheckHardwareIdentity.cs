@@ -3,7 +3,6 @@ using Easy_Licensing.Interfaces;
 using Easy_Licensing.Properties;
 
 using System.Collections.Generic;
-using System.Management;
 using System.Runtime.InteropServices;
 
 namespace Easy_Licensing.Checks
@@ -53,7 +52,7 @@ namespace Easy_Licensing.Checks
 
             // Return result
             if (pass == false)
-                FailureMessage = string.Format(Resources.FailedHardwareIdentity, string.Join(',', Failures));
+                FailureMessage = string.Format(Resources.FailedHardwareIdentity, string.Join(", ", Failures));
 
             return pass;
         }
@@ -64,6 +63,30 @@ namespace Easy_Licensing.Checks
         private bool CheckLicenseLinux(ILicense license)
         {
             var pass = false;
+
+            // Check CPU serial number
+            if (Settings.CheckCpuSerial)
+            {
+
+            }
+
+            // Check Hard Drive serial number
+            if (Settings.CheckDiskSerial)
+            {
+
+            }
+
+            // Check Ethernet MAC address
+            if (Settings.CheckEthernetMac)
+            {
+
+            }
+
+            // Check Wireless MAC address
+            if (Settings.CheckWirelessMac)
+            {
+
+            }
 
             // Check for running in virtual machine
             if (Settings.CheckVirtualMachine)
@@ -81,6 +104,30 @@ namespace Easy_Licensing.Checks
         {
             var pass = false;
 
+            // Check CPU serial number
+            if (Settings.CheckCpuSerial)
+            {
+
+            }
+
+            // Check Hard Drive serial number
+            if (Settings.CheckDiskSerial)
+            {
+
+            }
+
+            // Check Ethernet MAC address
+            if (Settings.CheckEthernetMac)
+            {
+
+            }
+
+            // Check Wireless MAC address
+            if (Settings.CheckWirelessMac)
+            {
+
+            }
+
             // Check for running in virtual machine
             if (Settings.CheckVirtualMachine)
             {
@@ -97,30 +144,58 @@ namespace Easy_Licensing.Checks
         {
             var pass = true;
 
+            // Check CPU serial number
+            if (Settings.CheckCpuSerial)
+            {
+                var serial = HardwareIdentityService.GetCpuSerialNumber();
+
+                if (license.HardwareIdentity.CpuSerialNumber != serial)
+                {
+                    pass = false;
+                    Failures.Add(Resources.FailedHardwareCpuSerial);
+                }
+            }
+
+            // Check Hard Drive serial number
+            if (Settings.CheckDiskSerial)
+            {
+                var serial = HardwareIdentityService.GetDriveSerialNumber();
+
+                if (license.HardwareIdentity.DriveSerialNumber != serial)
+                {
+                    pass = false;
+                    Failures.Add(Resources.FailedHardwareDriveSerial);
+                }
+            }
+
+            // Check Ethernet MAC address
+            if (Settings.CheckEthernetMac)
+            {
+                var mac = HardwareIdentityService.GetInterfaceMacAddress();
+
+                if (license.HardwareIdentity.EthernetMacAddress != mac)
+                {
+                    pass = false;
+                    Failures.Add(Resources.FailedHardwareEthernetMac);
+                }
+            }
+
+            // Check Wireless MAC address
+            if (Settings.CheckWirelessMac)
+            {
+                var mac = HardwareIdentityService.GetInterfaceMacAddress();
+
+                if (license.HardwareIdentity.WirelessMacAddress != mac)
+                {
+                    pass = false;
+                    Failures.Add(Resources.FailedHardwareWirelessMac);
+                }
+            }
+
             // Check for running in virtual machine
             if (Settings.CheckVirtualMachine)
             {
-                var isVm = false;
-
-                using (var searcher = new ManagementObjectSearcher("Select * from Win32_ComputerSystem"))
-                {
-                    using var items = searcher.Get();
-
-                    foreach (var item in items)
-                    {
-                        var manufacturer = item["Manufacturer"].ToString().ToLower();
-                        var model = item["Model"].ToString();
-
-                        if (
-                            (manufacturer == "microsoft corporation" && model.ToUpperInvariant().Contains("VIRTUAL")) ||
-                            manufacturer.Contains("vmware") ||
-                            model == "VirtualBox"
-                        )
-                        {
-                            isVm = true;
-                        }
-                    }
-                }
+                var isVm = HardwareIdentityService.IsVirtualMachine();
 
                 if (license.HardwareIdentity.IsVirtualMachine != isVm)
                 {

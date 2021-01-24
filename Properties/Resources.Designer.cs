@@ -61,6 +61,33 @@ namespace Easy_Licensing.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Licensed CPU serial does not match current hardware.
+        /// </summary>
+        internal static string FailedHardwareCpuSerial {
+            get {
+                return ResourceManager.GetString("FailedHardwareCpuSerial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Licensed disk drive serial does not match current hardware.
+        /// </summary>
+        internal static string FailedHardwareDriveSerial {
+            get {
+                return ResourceManager.GetString("FailedHardwareDriveSerial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Licensed Ethernet MAC does not match current hardware.
+        /// </summary>
+        internal static string FailedHardwareEthernetMac {
+            get {
+                return ResourceManager.GetString("FailedHardwareEthernetMac", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to One or more provided hardware details did not match the license details: {0}..
         /// </summary>
         internal static string FailedHardwareIdentity {
@@ -84,6 +111,15 @@ namespace Easy_Licensing.Properties {
         internal static string FailedHardwareVirtualRequired {
             get {
                 return ResourceManager.GetString("FailedHardwareVirtualRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Licensed Wireless MAC does not match current hardware.
+        /// </summary>
+        internal static string FailedHardwareWirelessMac {
+            get {
+                return ResourceManager.GetString("FailedHardwareWirelessMac", resourceCulture);
             }
         }
         
